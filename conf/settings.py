@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+import os
+from django.conf import settings
 
 from pathlib import Path
 from decouple import config
@@ -119,6 +121,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'core.User'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(settings.BASE_DIR, 'media/')
 
 
 # Internationalization
