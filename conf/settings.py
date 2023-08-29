@@ -25,6 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('APP_KEY')
+APP_ENV = config('APP_ENV')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
