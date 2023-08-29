@@ -15,5 +15,8 @@ class BaseSerializer(serializers.ModelSerializer):
 
         if self.context['view'].action in self.Meta.methods:
             fields = {field: fields[field] for field in self.Meta.custom_fields if field in fields}
+        
+        request = self.context.get('request')
+        self.user = request.user
 
         return fields
