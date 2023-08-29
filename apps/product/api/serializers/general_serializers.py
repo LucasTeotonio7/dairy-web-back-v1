@@ -1,7 +1,6 @@
-from rest_framework import serializers
-
 from apps.product.models import MeasureUnit, Category, Brand
-from apps.product.api.serializers.base_serializers import BaseSerializer
+from apps.core.api.serializers.base_serializers import BaseSerializer
+
 
 class MeasureUnitSerializer(BaseSerializer):
 
