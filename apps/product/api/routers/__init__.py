@@ -8,7 +8,7 @@ from apps.product.api.views.general_views import MeasureUnitView, CategoryView, 
 router = routers.DefaultRouter()
 router.register(r'measure_unit', MeasureUnitView, basename='measure_unit')
 router.register(r'category', CategoryView, basename='category')
-router.register(r'brand', BrandView, basename='measure_unit')
+router.register(r'brand', BrandView, basename='brand')
 
 urlpatterns = [
     path('', include(router.urls)),
