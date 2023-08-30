@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
 from apps.product.models import Price
-from apps.product.api.serializers.price_serializer import PriceSerializer
+from apps.product.api.serializers.price_serializers import PriceSerializer
 
 
 class PriceView(viewsets.ModelViewSet):
