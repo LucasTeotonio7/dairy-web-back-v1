@@ -1,4 +1,6 @@
-from apps.product.models import Price
+from rest_framework.exceptions import ValidationError
+
+from apps.product.models import Price, PriceProductSupplier
 from apps.core.api.serializers.base_serializers import BaseSerializer
 
 
@@ -24,3 +26,31 @@ class PriceSerializer(BaseSerializer):
         default = validated_data.get('default', False)
         if default:
             Price.objects.filter(default=True).update(default=False)
+
+
+class PriceProductSupplierSerializer(BaseSerializer):
+
+    class Meta:
+        model = PriceProductSupplier
+        exclude = ['deleted']
+        custom_fields = ['price', 'supplier']
+        methods = ['create', 'update', 'partial_update']
+
+    def create(self, validated_data: dict):
+        price = validated_data.get('price')
+        supplier = validated_data.get('supplier')
+
+        price_product_supplier = PriceProductSupplier.objects.filter(
+            supplier=supplier
+        ).first()
+
+        if price_product_supplier:
+            
+            if price_product_supplier.price == price:
+                return price_product_supplier
+            else:
+                price_product_supplier.price = price
+                price_product_supplier.save()
+                return price_product_supplier
+
+        return super().create(validated_data)
