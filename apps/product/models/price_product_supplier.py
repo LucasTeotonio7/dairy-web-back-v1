@@ -19,4 +19,4 @@ class PriceProductSupplier(TimestampedModel):
         verbose_name_plural = 'Product supplier pricing'
 
     def __str__(self):
-        return f'{self.product} {self.quantity}'
+        return f'{self.price} {self.supplier}'

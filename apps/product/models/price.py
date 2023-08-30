@@ -22,4 +22,4 @@ class Price(TimestampedModel):
         verbose_name_plural = 'Prices'
 
     def __str__(self):
-        return f'{self.product} {self.value}'
+        return f'{self.description} {self.product} {self.value}'
