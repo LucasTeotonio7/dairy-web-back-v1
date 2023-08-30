@@ -4,9 +4,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 from apps.core.models.mixins.user_manager import UserManager
+from apps.core.models.mixins.timestamped_model import TimestampedModel
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(TimestampedModel, AbstractBaseUser, PermissionsMixin):
     user_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(max_length=255, unique=True,)
