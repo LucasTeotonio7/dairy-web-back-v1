@@ -22,4 +22,4 @@ class WeeklyControl(TimestampedModel):
         verbose_name_plural = 'Weekly controls'
 
     def __str__(self):
-        return f'{self.start_date} {self.end_date}'
+        return f'{self.product} {self.start_date} {self.end_date}'
