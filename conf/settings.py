@@ -133,7 +133,7 @@ MEDIA_ROOT = os.path.join(settings.BASE_DIR, 'media/')
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
