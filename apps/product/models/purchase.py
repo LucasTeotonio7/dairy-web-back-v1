@@ -13,6 +13,7 @@ class Purchase(TimestampedModel):
     is_closed = models.BooleanField(default=False)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT)
+    reference_day = models.DateField(null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
 
     class Meta:
