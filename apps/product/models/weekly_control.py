@@ -8,7 +8,7 @@ from apps.product.models import Product
 
 
 class WeeklyControl(TimestampedModel):
-    weekly_control_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     start_date = models.DateField()
     end_date = models.DateField()
     is_closed = models.BooleanField(default=False)

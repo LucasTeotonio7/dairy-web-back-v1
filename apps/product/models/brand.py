@@ -6,7 +6,7 @@ from apps.core.models.mixins.timestamped_model import TimestampedModel
 
 
 class Brand(TimestampedModel):
-    brand_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.CharField(max_length=50, unique=True)
 
     class Meta:

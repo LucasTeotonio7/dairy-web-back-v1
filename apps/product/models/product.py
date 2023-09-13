@@ -8,7 +8,7 @@ from apps.product.models import Brand, Category, MeasureUnit
 
 
 class Product(TimestampedModel):
-    product_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.CharField(max_length=255, blank=True, null=True)
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)

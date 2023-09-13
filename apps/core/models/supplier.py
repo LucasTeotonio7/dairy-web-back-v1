@@ -7,7 +7,7 @@ from apps.core.models import User, Address
 
 
 class Supplier(TimestampedModel):
-    supplier_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, blank=True, null=True)
     cellphone = models.CharField(max_length=255, blank=True, null=True)
     active = models.BooleanField(default=True)

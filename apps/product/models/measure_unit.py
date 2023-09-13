@@ -6,7 +6,7 @@ from apps.core.models.mixins.timestamped_model import TimestampedModel
 
 
 class MeasureUnit(TimestampedModel):
-    measure_unit_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.CharField(max_length=50, blank=False, unique=True)
     abbreviation = models.CharField(max_length=3, blank=False, unique=True)
 

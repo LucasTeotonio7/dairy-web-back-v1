@@ -8,7 +8,7 @@ from apps.product.models import Product
 
 
 class Price(TimestampedModel):
-    price_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     value = models.DecimalField(max_digits=8, decimal_places=2)
     description = models.CharField(max_length=50, blank=True, null=True)
     default = models.BooleanField(default=False)

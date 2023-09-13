@@ -8,7 +8,7 @@ from apps.product.models import Product
 
 
 class Purchase(TimestampedModel):
-    purchase_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     quantity = models.DecimalField(max_digits=8, decimal_places=2)
     is_closed = models.BooleanField(default=False)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)

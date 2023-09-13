@@ -8,7 +8,7 @@ from apps.product.models import Price
 
 
 class PriceProductSupplier(TimestampedModel):
-    price_product_supplier_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     price = models.ForeignKey(Price, on_delete=models.PROTECT)
     supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT)
 

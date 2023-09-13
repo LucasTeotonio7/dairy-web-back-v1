@@ -4,8 +4,8 @@ from apps.product.models import MeasureUnit
 
 
 class MeasureUnitAdmin(admin.ModelAdmin):
-    list_display = ('measure_unit_id', 'abbreviation', 'description')
-    list_display_links = ('measure_unit_id', )
+    list_display = ('id', 'abbreviation', 'description')
+    list_display_links = ('id', )
     search_fields = ('abbreviation', 'description')
     list_per_page = 20
 

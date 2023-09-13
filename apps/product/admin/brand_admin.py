@@ -4,8 +4,8 @@ from apps.product.models import Brand
 
 
 class BrandAdmin(admin.ModelAdmin):
-    list_display = ('brand_id', 'description')
-    list_display_links = ('brand_id', )
+    list_display = ('id', 'description')
+    list_display_links = ('id', )
     search_fields = ('description', )
     list_per_page = 20
 

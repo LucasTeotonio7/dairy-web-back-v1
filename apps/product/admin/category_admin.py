@@ -4,8 +4,8 @@ from apps.product.models import Category
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('category_id', 'description')
-    list_display_links = ('category_id', )
+    list_display = ('id', 'description')
+    list_display_links = ('id', )
     search_fields = ('description', )
     list_per_page = 20
 
