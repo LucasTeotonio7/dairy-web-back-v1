@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
+import __init__ as app
 from django.conf import settings
 
 from pathlib import Path
@@ -54,7 +55,7 @@ THIRD_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'drf_yasg',
+    'drf_spectacular',
 ]
 
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS
@@ -160,4 +161,39 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'DEFAULT_GENERATOR_CLASS': 'drf_spectacular.generators.SchemaGenerator',
+    'TITLE': 'Dairy API',
+    'DESCRIPTION': 'api to control the production of dairy products.',
+    'CONTACT': {
+        'name': 'Lucas Teotonio',
+        'email': 'lucas-santos-teo@hotmail.com'
+    },
+    'VERSION': app.__version__,
+    # # include schema enpoint into schema
+    'SERVE_INCLUDE_SCHEMA': False,
+    # list of authentication/permission classes for spectacular's views.
+    'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny'],
+    # # None will default to DRF's AUTHENTICATION_CLASSES
+    'SERVE_AUTHENTICATION': None,
+    # Oauth2 related settings. used for example by django-oauth2-toolkit.
+    # https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#oauth-flows-object
+    'OAUTH2_FLOWS': ['clientCredentials'],
+    'OAUTH2_TOKEN_URL': '/oauth/token/',
+    'OAUTH2_AUTHORIZATION_URL': '/oauth/authorize/',
+    'OAUTH2_SCOPES': None,
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'filter': True,
+        'apisSorter': 'alpha',
+        'operationsSorter': 'alpha',
+        'tagsSorter': 'alpha',
+        'displayRequestDuration': True,
+        'syntaxHighlight.activate': True,
+        'syntaxHighlight.theme': 'monokai',
+    }
 }
