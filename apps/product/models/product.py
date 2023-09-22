@@ -13,6 +13,7 @@ class Product(TimestampedModel):
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     measure_unit = models.ForeignKey(MeasureUnit, on_delete=models.PROTECT)
+    unit_quantity = models.DecimalField(decimal_places=2, max_digits=8, default=1)
     active = models.BooleanField(default=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
     image = models.ImageField(upload_to='products/', max_length=255, null=True, blank=True)
