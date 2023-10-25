@@ -1,7 +1,6 @@
-from rest_framework import serializers
-
 from apps.product.models import Product
 from apps.core.api.serializers.base_serializers import BaseSerializer
+from apps.product.api.serializers.general_serializers import *
 
 
 class ProductSerializer(BaseSerializer):
@@ -19,9 +18,13 @@ class ProductSerializer(BaseSerializer):
     def get_category(self, validated_data):
         return validated_data
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['brand'] = instance.brand.description
-        representation['category'] = instance.category.description
-        representation['measure_unit'] = instance.measure_unit.abbreviation
-        return representation
+
+class ProductDetailSerializer(BaseSerializer):
+
+    brand = BrandSerializer()
+    category = CategorySerializer()
+    measure_unit = MeasureUnitSerializer()
+
+    class Meta:
+        model = Product
+        exclude = ['deleted']
