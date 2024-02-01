@@ -12,6 +12,14 @@ class ProductView(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     pagination_class = Paginator
 
+    def get_queryset(self):
+        no_pagination = self.request.query_params.get('no_paginate', None)
+        if no_pagination:
+            self.pagination_class = None
+        else:
+            self.pagination_class = Paginator
+        return super().get_queryset()
+
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
             return ProductDetailSerializer
