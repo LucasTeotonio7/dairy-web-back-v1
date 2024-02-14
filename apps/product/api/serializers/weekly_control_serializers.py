@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.product.models import WeeklyControl
+from apps.product.services import get_weekly_control_purchases_by_supplier
 from apps.core.api.serializers.base_serializers import BaseSerializer
 
 
@@ -16,3 +17,15 @@ class WeeklyControlSerializer(BaseSerializer):
     def create(self, validated_data):
         validated_data['created_by'] = self.user
         return super().create(validated_data)
+
+class WeeklyControlDetailSerializer(serializers.ModelSerializer):
+    product_description = serializers.CharField(source='product.description')
+
+    class Meta:
+        model = WeeklyControl
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['suppliers'] = get_weekly_control_purchases_by_supplier(instance)
+        return data
