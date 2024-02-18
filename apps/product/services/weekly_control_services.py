@@ -1,11 +1,7 @@
 from datetime import timedelta
-from decimal import Decimal
-
-from django.db.models import Sum, Q, DecimalField
-from django.db.models.functions import Coalesce
 
 from apps.core.models import Supplier
-from apps.product.models import WeeklyControl
+from apps.product.models import Purchase, WeeklyControl
 
 
 def get_weekly_control_purchases_by_supplier(week_control: WeeklyControl):
@@ -14,32 +10,35 @@ def get_weekly_control_purchases_by_supplier(week_control: WeeklyControl):
     end_date = week_control.end_date
     product = week_control.product
 
-    date_range = [end_date - timedelta(days=i) for i in range(7)]
-
-    suppliers_with_purchases = Supplier.objects.annotate(
-        purchases=Coalesce(
-            Sum('purchase__quantity', filter=(
-                Q(purchase__reference_day__gte=start_date) &
-                Q(purchase__reference_day__lte=end_date) &
-                Q(purchase__product=product)
-            )),
-            Decimal('0.00'), output_field=DecimalField()
-        )
-    ).values('id', 'name', 'purchases')
+    date_range = [start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1)]
 
     result = []
-    for supplier in suppliers_with_purchases:
-        purchases = [
-            {
+    suppliers = Supplier.objects.all()
+    for supplier in suppliers:
+        purchases_by_supplier = Purchase.objects.filter(
+            reference_day__gte=start_date,
+            reference_day__lte=end_date,
+            product=product,
+            supplier=supplier
+        )
+        purchases = []
+        total_quantity = 0.00
+        for date in date_range:
+            quantity = 0.00
+            purchase_by_reference_day = purchases_by_supplier.filter(reference_day=date).first()
+            if purchase_by_reference_day:
+                quantity = purchase_by_reference_day.quantity
+            purchases.append({
                 'reference_day': date.strftime('%Y-%m-%d'),
-                'quantity': supplier['purchases'] if date in date_range else '0.00',
-                'supplier': supplier['name']
-            }
-            for date in date_range
-        ]
+                'quantity':  quantity,
+                'weekday': date.weekday()
+            })
+            total_quantity += float(quantity)
+
         result.append({
-            'supplier': supplier['name'],
-            'purchases': purchases
+            'supplier': supplier.name,
+            'purchases': purchases,
+            'total_quantity': total_quantity
         })
 
     return result
