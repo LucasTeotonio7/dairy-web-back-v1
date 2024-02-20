@@ -4,11 +4,10 @@ from apps.core.models import Supplier
 from apps.product.models import Purchase, WeeklyControl
 
 
-def get_weekly_control_purchases_by_supplier(week_control: WeeklyControl):
+def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl):
 
-    start_date = week_control.start_date
-    end_date = week_control.end_date
-    product = week_control.product
+    start_date = weekly_control.start_date
+    end_date = weekly_control.end_date
 
     date_range = [start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1)]
 
@@ -16,9 +15,7 @@ def get_weekly_control_purchases_by_supplier(week_control: WeeklyControl):
     suppliers = Supplier.objects.all()
     for supplier in suppliers:
         purchases_by_supplier = Purchase.objects.filter(
-            reference_day__gte=start_date,
-            reference_day__lte=end_date,
-            product=product,
+            weekly_control=weekly_control,
             supplier=supplier
         )
         purchases = []
