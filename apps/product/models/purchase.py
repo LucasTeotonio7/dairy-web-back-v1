@@ -4,7 +4,7 @@ from django.db import models
 
 from apps.core.models.mixins.timestamped_model import TimestampedModel
 from apps.core.models import User, Supplier
-from apps.product.models import Product
+from apps.product.models import Product, WeeklyControl
 
 
 class Purchase(TimestampedModel):
@@ -14,6 +14,7 @@ class Purchase(TimestampedModel):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT)
     reference_day = models.DateField(null=True, blank=True)
+    weekly_control = models.ForeignKey(WeeklyControl, null=True, blank=True, on_delete=models.PROTECT)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT)
 
     class Meta:
@@ -21,6 +22,9 @@ class Purchase(TimestampedModel):
         ordering = ['created_at']
         verbose_name = 'Purchase'
         verbose_name_plural = 'Purchases'
+        constraints = [
+            models.UniqueConstraint(fields=['supplier', 'reference_day', 'weekly_control'], name='unique_daily_supplier_transaction'),
+        ]
 
     def __str__(self):
         return f'{self.product} {self.quantity}'
