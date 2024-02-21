@@ -33,7 +33,8 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl):
             total_quantity += float(quantity)
 
         result.append({
-            'supplier': supplier.name,
+            'id': supplier.id,
+            'name': supplier.name,
             'purchases': purchases,
             'total_quantity': total_quantity
         })
