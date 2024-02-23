@@ -27,5 +27,10 @@ class WeeklyControlDetailSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['suppliers'] = get_weekly_control_purchases_by_supplier(instance)
+        supplier_id = None
+        context: dict = self._kwargs.get('context')
+        request = context.get('request')
+        params: dict = request.query_params
+        supplier_id = params.get('supplier_id')
+        data['suppliers'] = get_weekly_control_purchases_by_supplier(instance, supplier_id)
         return data

@@ -4,7 +4,7 @@ from apps.core.models import Supplier
 from apps.product.models import Purchase, WeeklyControl
 
 
-def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl):
+def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supplier_id: str = None):
 
     start_date = weekly_control.start_date
     end_date = weekly_control.end_date
@@ -13,6 +13,9 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl):
 
     result = []
     suppliers = Supplier.objects.all()
+    if supplier_id:
+        suppliers = suppliers.filter(id=supplier_id)
+
     for supplier in suppliers:
         purchases_by_supplier = Purchase.objects.filter(
             weekly_control=weekly_control,
