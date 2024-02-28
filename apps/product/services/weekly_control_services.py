@@ -25,10 +25,13 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
         total_quantity = 0.00
         for date in date_range:
             quantity = 0.00
+            id = None
             purchase_by_reference_day = purchases_by_supplier.filter(reference_day=date).first()
             if purchase_by_reference_day:
                 quantity = purchase_by_reference_day.quantity
+                id = purchase_by_reference_day.id
             purchases.append({
+                'id': id,
                 'reference_day': date.strftime('%Y-%m-%d'),
                 'quantity':  quantity,
                 'weekday': date.weekday()
