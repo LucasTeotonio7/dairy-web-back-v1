@@ -7,7 +7,7 @@ class PurchaseSerializer(BaseSerializer):
     class Meta:
         model = Purchase
         exclude = ['deleted']
-        custom_fields = ['quantity', 'is_closed', 'product', 'reference_day', 'supplier']
+        custom_fields = ['quantity', 'is_closed', 'product', 'reference_day', 'supplier', 'weekly_control']
         methods = ['create', 'update', 'partial_update']
 
     def create(self, validated_data):
