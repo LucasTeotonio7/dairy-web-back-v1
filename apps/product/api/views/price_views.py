@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import status
 
+from apps.core.components import Paginator
 from apps.product.models import Price, PriceProductSupplier
 from apps.product.api.serializers.price_serializers import PriceSerializer, PriceProductSupplierSerializer
 
@@ -11,6 +12,7 @@ from apps.product.api.serializers.price_serializers import PriceSerializer, Pric
 class PriceView(viewsets.ModelViewSet):
     queryset = Price.objects.all()
     serializer_class = PriceSerializer
+    pagination_class = Paginator
 
 
 @extend_schema(tags=['Price Product Supplier', ])
