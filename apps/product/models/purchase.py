@@ -10,6 +10,7 @@ from apps.product.models import Product, WeeklyControl
 class Purchase(TimestampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     quantity = models.DecimalField(max_digits=8, decimal_places=2)
+    unit_price = models.DecimalField(max_digits=8, decimal_places=2)
     is_closed = models.BooleanField(default=False)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT)
