@@ -42,21 +42,25 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
             total_quantity += float(quantity)
 
         price_table = supplier.priceproductsupplier_set.first()
-        price_value = 0.00
+        price = {}
         if not price_table:
             price_default = Price.objects.filter(
                 product=weekly_control.product, 
                 default=True
             ).first()
             if price_default:
-                price_value = float(price_default.value)
+                price['value'] = float(price_default.value)
+                price['id'] = price_default.id
+                price['default'] = True
         else:
-            price_value = float(price_table.price.value)
+            price['value'] = float(price_table.price.value)
+            price['id'] = price_table.price_id
+            price['default'] = False
 
         result.append({
             'id': supplier.id,
             'name': supplier.name,
-            'price': price_value,
+            'price': price,
             'purchases': purchases,
             'total_quantity': total_quantity
         })
