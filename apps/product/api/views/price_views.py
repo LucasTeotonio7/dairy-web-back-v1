@@ -15,14 +15,12 @@ class PriceView(viewsets.ModelViewSet):
     pagination_class = Paginator
 
     def get_queryset(self):
-        queryset = super().get_queryset()
         no_pagination = self.request.query_params.get('no_paginate', None)
         if no_pagination:
             self.pagination_class = None
-            queryset = queryset.filter(default=False)
         else:
             self.pagination_class = Paginator
-        return queryset
+        return super().get_queryset()
 
 
 @extend_schema(tags=['Price Product Supplier', ])
