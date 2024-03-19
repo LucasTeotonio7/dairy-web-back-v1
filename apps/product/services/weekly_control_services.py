@@ -55,6 +55,7 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
         else:
             price['value'] = float(price_table.price.value)
             price['id'] = price_table.price_id
+            price['price_product_supplier_id'] = price_table.id
             price['default'] = False
 
         result.append({
