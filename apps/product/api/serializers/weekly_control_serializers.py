@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.product.models import WeeklyControl
+from apps.product.models import WeeklyControl, Purchase
 from apps.product.services import get_weekly_control_purchases_by_supplier
 from apps.core.api.serializers.base_serializers import BaseSerializer
 
@@ -33,4 +33,5 @@ class WeeklyControlDetailSerializer(serializers.ModelSerializer):
         params: dict = request.query_params
         supplier_id = params.get('supplier_id')
         data['suppliers'] = get_weekly_control_purchases_by_supplier(instance, supplier_id)
+        data['purchase_exists'] = Purchase.objects.filter(weekly_control=instance).exists()
         return data
