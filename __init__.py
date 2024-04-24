@@ -1,2 +1,2 @@
-__version__ = '0.1.6'
+__version__ = '0.1.7'
 __package__ = 'dairy_web_back_v1'

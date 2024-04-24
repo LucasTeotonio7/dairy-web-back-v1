@@ -27,13 +27,17 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
             quantity = 0.00
             price = 0.00
             id = None
+            is_closed = False
             purchase_by_reference_day = purchases_by_supplier.filter(reference_day=date).first()
             if purchase_by_reference_day:
                 quantity = purchase_by_reference_day.quantity
                 id = purchase_by_reference_day.id
                 price = purchase_by_reference_day.unit_price
+                is_closed = purchase_by_reference_day.is_closed
+
             purchases.append({
                 'id': id,
+                'is_closed': is_closed,
                 'reference_day': date.strftime('%Y-%m-%d'),
                 'quantity':  quantity,
                 'price': price,
@@ -57,10 +61,15 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
             price['id'] = price_table.price_id
             price['price_product_supplier_id'] = price_table.id
             price['default'] = False
-
+        paid_supplier = Purchase.objects.filter(
+            weekly_control=weekly_control, 
+            is_closed=True,
+            supplier=supplier
+        ).exists()
         result.append({
             'id': supplier.id,
             'name': supplier.name,
+            'paid_supplier': paid_supplier,
             'price': price,
             'purchases': purchases,
             'total_quantity': total_quantity
