@@ -12,7 +12,7 @@ class SupplierPayment(TimestampedModel):
     quantity = models.DecimalField(max_digits=8, decimal_places=2)
     unit_price = models.DecimalField(max_digits=8, decimal_places=2)
     supplier = models.ForeignKey(Supplier, on_delete=models.PROTECT)
-    weekly_control = models.ForeignKey(WeeklyControl, null=True, blank=True, on_delete=models.PROTECT)
+    weekly_control = models.ForeignKey(WeeklyControl, on_delete=models.PROTECT)
 
     class Meta:
         db_table = 'supplier_payment'
