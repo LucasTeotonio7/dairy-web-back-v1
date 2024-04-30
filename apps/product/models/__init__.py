@@ -7,3 +7,4 @@ from .price_product_supplier import PriceProductSupplier
 from .weekly_control import WeeklyControl
 from .purchase import Purchase
 from .supplier_payment import SupplierPayment
+from .weekly_control_event import WeeklyControlEvent
