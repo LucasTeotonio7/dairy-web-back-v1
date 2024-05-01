@@ -1,5 +1,5 @@
 from apps.core.models import Supplier
-from apps.product.models import Purchase, PriceProductSupplier, Price
+from apps.product.models import Purchase, PriceProductSupplier, Price,WeeklyControlEvent
 from apps.core.api.serializers.base_serializers import BaseSerializer
 
 
@@ -12,18 +12,28 @@ class PurchaseSerializer(BaseSerializer):
         methods = ['create', 'update', 'partial_update']
 
     def create(self, validated_data):
-        supplier: Supplier = validated_data['supplier']
-        price_table: PriceProductSupplier = supplier.priceproductsupplier_set.first()
-        unit_price = 0.00
-        if price_table:
-            unit_price = price_table.price.value
-        else:
-            price_default = Price.objects.filter(
-                product=validated_data['product'], 
-                default=True
-            ).first()
-            if price_default:
-                unit_price = price_default.value
-        validated_data['unit_price'] = unit_price
+        weekly_control_event = WeeklyControlEvent(
+            type=WeeklyControlEvent.Type.RECORD,
+            new_value=validated_data['quantity'],
+            reference_day=validated_data['reference_day'],
+            supplier=validated_data['supplier'],
+            weekly_control=validated_data['weekly_control'],
+            created_by=self.user
+        )
+        weekly_control_event.save()
 
         return super().create(validated_data)
+    
+
+    def update(self, instance, validated_data):
+        weekly_control_event = WeeklyControlEvent(
+            type=WeeklyControlEvent.Type.RECORD,
+            old_value=instance.quantity,
+            new_value=validated_data['quantity'],
+            reference_day=instance.reference_day,
+            supplier=instance.supplier,
+            weekly_control=instance.weekly_control,
+            created_by=self.user
+        )
+        weekly_control_event.save()
+        return super().update(instance, validated_data)
