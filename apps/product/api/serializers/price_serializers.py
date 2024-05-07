@@ -1,6 +1,4 @@
-from rest_framework.exceptions import ValidationError
-
-from apps.product.models import Price, PriceProductSupplier
+from apps.product.models import Price, PriceProductSupplier,WeeklyControlEvent
 from apps.core.api.serializers.base_serializers import BaseSerializer
 
 
@@ -44,13 +42,32 @@ class PriceProductSupplierSerializer(BaseSerializer):
             supplier=supplier
         ).first()
 
+        weekly_control_event = WeeklyControlEvent(
+            type=WeeklyControlEvent.Type.PRICE,
+            new_value=price.value,
+            supplier=supplier,
+            weekly_control_id=self.initial_data.get('weekly_control_id'),
+            created_by=self.user
+        )
+
         if price_product_supplier:
             
             if price_product_supplier.price == price:
                 return price_product_supplier
             else:
+                weekly_control_event.old_value = price_product_supplier.price.value
+                weekly_control_event.save()
+
                 price_product_supplier.price = price
                 price_product_supplier.save()
                 return price_product_supplier
+        
+        else:
+            price_default = Price.objects.filter(
+               default=True,
+               product=price.product
+            ).first()
+            weekly_control_event.old_value = price_default.value
+            weekly_control_event.save()
 
         return super().create(validated_data)

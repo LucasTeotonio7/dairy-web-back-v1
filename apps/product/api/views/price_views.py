@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework import status
 
 from apps.core.components import Paginator
-from apps.product.models import Price, PriceProductSupplier
+from apps.product.models import Price, PriceProductSupplier, WeeklyControlEvent
 from apps.product.api.serializers.price_serializers import PriceSerializer, PriceProductSupplierSerializer
 
 
@@ -32,8 +32,17 @@ class PriceProductSupplierView(viewsets.ModelViewSet):
     def destroy(self, request, pk):
         try:
             instance: PriceProductSupplier = self.get_object()
+            weekly_control_event = WeeklyControlEvent(
+                type=WeeklyControlEvent.Type.PRICE,
+                old_value=instance.price.value,
+                new_value=request.query_params.get('new_value'),
+                supplier=instance.supplier,
+                weekly_control_id=request.query_params.get('weekly_control_id'),
+                created_by=request.user
+            )
+            weekly_control_event.save()
             instance.hard_delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        
+
         except PriceProductSupplierSerializer.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
