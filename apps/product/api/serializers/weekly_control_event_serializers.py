@@ -19,7 +19,7 @@ class WeeklyControlEventSerializer(BaseSerializer):
     class Meta:
         model = WeeklyControlEvent
         exclude = ['deleted']
-        custom_fields = ['start_date', 'end_date', 'is_closed', 'product']
+        custom_fields = ['type', 'description', 'old_value', 'new_value', 'reference_day', 'supplier', 'weekly_control']
         methods = ['create']
 
     def create(self, validated_data):
