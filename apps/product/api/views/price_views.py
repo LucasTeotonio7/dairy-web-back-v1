@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework import status
 
 from apps.core.components import Paginator
-from apps.product.models import Price, PriceProductSupplier, WeeklyControlEvent
+from apps.product.models import Price, PriceProductSupplier, WeeklyControl, WeeklyControlEvent
 from apps.product.api.serializers.price_serializers import PriceSerializer, PriceProductSupplierSerializer
 
 
@@ -27,6 +27,11 @@ class PriceView(viewsets.ModelViewSet):
         else:
             self.pagination_class = Paginator
         return queryset
+
+    def destroy(self, request, pk):
+        price: Price = self.get_object()
+        PriceProductSupplier.objects.filter(price=price).delete()
+        return super().destroy(request, pk)
 
 
 @extend_schema(tags=['Price Product Supplier', ])
