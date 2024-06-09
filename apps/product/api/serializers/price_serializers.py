@@ -23,7 +23,8 @@ class PriceSerializer(BaseSerializer):
 
         default = validated_data.get('default', False)
         if default:
-            Price.objects.filter(default=True).update(default=False)
+            product = validated_data.get('product')
+            Price.objects.filter(product=product, default=True).update(default=False)
 
 
 class PriceProductSupplierSerializer(BaseSerializer):
