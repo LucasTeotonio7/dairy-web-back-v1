@@ -30,6 +30,15 @@ class PriceView(viewsets.ModelViewSet):
 
     def destroy(self, request, pk):
         price: Price = self.get_object()
+        if price.default:
+            product = price.product
+            weekly_control_exists = WeeklyControl.objects.filter(product=product).exists()
+            if weekly_control_exists:
+                return Response(
+                    data={'message': 'Products with a spreadsheet must have at least one default table.'},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
         PriceProductSupplier.objects.filter(price=price).delete()
         return super().destroy(request, pk)
 

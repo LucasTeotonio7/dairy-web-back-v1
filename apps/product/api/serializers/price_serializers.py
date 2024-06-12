@@ -1,14 +1,25 @@
-from apps.product.models import Price, PriceProductSupplier,WeeklyControlEvent
+from rest_framework import serializers
+
+from apps.product.models import Price, PriceProductSupplier, WeeklyControl, WeeklyControlEvent
 from apps.core.api.serializers.base_serializers import BaseSerializer
 
 
 class PriceSerializer(BaseSerializer):
+    has_spreadsheet = serializers.SerializerMethodField()
 
     class Meta:
         model = Price
         exclude = ['deleted']
         custom_fields = ['value', 'description', 'default', 'product']
         methods = ['create', 'update', 'partial_update']
+
+    def get_has_spreadsheet(self, obj):
+        price: Price = obj
+        if price.default:
+            product = price.product
+            weekly_control_exists = WeeklyControl.objects.filter(product=product).exists()
+            return weekly_control_exists
+        return False
 
     def create(self, validated_data: dict):
         validated_data['created_by'] = self.user
