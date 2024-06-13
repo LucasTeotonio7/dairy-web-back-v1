@@ -51,7 +51,7 @@ class PriceProductSupplierSerializer(BaseSerializer):
         supplier = validated_data.get('supplier')
 
         price_product_supplier = PriceProductSupplier.objects.filter(
-            supplier=supplier
+            supplier=supplier, price__product=price.product,
         ).first()
 
         weekly_control_event = WeeklyControlEvent(
