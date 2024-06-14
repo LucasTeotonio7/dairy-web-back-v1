@@ -39,7 +39,23 @@ class PriceView(viewsets.ModelViewSet):
                     status=status.HTTP_403_FORBIDDEN
                 )
 
-        PriceProductSupplier.objects.filter(price=price).delete()
+        price_product_supplier_list = PriceProductSupplier.objects.filter(price=price)
+        for price_ps in price_product_supplier_list:
+            price_default = Price.objects.filter(default=True, product=price_ps.price.product).first()
+            weekly_control_list = WeeklyControl.objects.filter(product=price_default.product, is_closed=False)
+            for weekly_control in weekly_control_list:
+                weekly_control_event = WeeklyControlEvent(
+                    type=WeeklyControlEvent.Type.PRICE,
+                    new_value=price_default.value,
+                    old_value=price_ps.price.value,
+                    supplier=price_ps.supplier,
+                    description=f'A tabela <b>{ price_ps.price.description } R$ { price_ps.price.value }</b> foi excluída.',
+                    weekly_control=weekly_control,
+                    created_by=self.request.user
+                )
+                weekly_control_event.save()
+            price_ps.delete()
+
         return super().destroy(request, pk)
 
 
