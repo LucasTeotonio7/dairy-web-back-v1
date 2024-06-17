@@ -17,12 +17,16 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
         suppliers = suppliers.filter(id=supplier_id)
 
     for supplier in suppliers:
+        if not weekly_control.is_closed and not supplier.active:
+            continue
+
         purchases_by_supplier = Purchase.objects.filter(
             weekly_control=weekly_control,
             supplier=supplier
         )
         purchases = []
         total_quantity = 0.00
+        has_purchases = False
         for date in date_range:
             quantity = 0.00
             price = 0.00
@@ -31,6 +35,7 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
             if purchase_by_reference_day:
                 quantity = purchase_by_reference_day.quantity
                 id = purchase_by_reference_day.id
+                has_purchases = True
 
             purchases.append({
                 'id': id,
@@ -39,6 +44,14 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
                 'weekday': date.weekday()
             })
             total_quantity += float(quantity)
+        
+        paid_supplier = SupplierPayment.objects.filter(
+            weekly_control=weekly_control,
+            supplier=supplier,
+        ).exists()
+
+        if weekly_control.is_closed and not has_purchases and not paid_supplier:
+            continue
 
         price_table = supplier.priceproductsupplier_set.filter(
             price__product=weekly_control.product
@@ -58,10 +71,7 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
             price['id'] = price_table.price_id
             price['price_product_supplier_id'] = price_table.id
             price['default'] = False
-        paid_supplier = SupplierPayment.objects.filter(
-            weekly_control=weekly_control,
-            supplier=supplier,
-        ).exists()
+
         result.append({
             'id': supplier.id,
             'name': supplier.name,
