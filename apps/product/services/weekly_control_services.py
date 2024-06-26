@@ -48,9 +48,9 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
         paid_supplier = SupplierPayment.objects.filter(
             weekly_control=weekly_control,
             supplier=supplier,
-        ).exists()
+        )
 
-        if weekly_control.is_closed and not has_purchases and not paid_supplier:
+        if weekly_control.is_closed and not has_purchases and not paid_supplier.exists():
             continue
 
         price_table = supplier.priceproductsupplier_set.filter(
@@ -75,7 +75,8 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
         result.append({
             'id': supplier.id,
             'name': supplier.name,
-            'paid_supplier': paid_supplier,
+            'paid_supplier': paid_supplier.exists(),
+            'paid_at': paid_supplier.first().created_at if paid_supplier.exists() else None,
             'price': price,
             'purchases': purchases,
             'total_quantity': total_quantity
