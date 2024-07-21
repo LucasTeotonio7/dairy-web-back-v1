@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 
 from django.db import models
 
@@ -20,7 +20,7 @@ class TimestampedModel(models.Model):
         abstract = True
 
     def delete(self, using=None, keep_parents=False):
-        self.deleted = datetime.now()
+        self.deleted = timezone.now()
         self.save()
 
     def hard_delete(self):
