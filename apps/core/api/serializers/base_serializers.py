@@ -10,13 +10,14 @@ class BaseSerializer(serializers.ModelSerializer):
     def get_fields(self):
         fields = super().get_fields()
 
-        if not hasattr(self.Meta, 'methods') or not hasattr(self.Meta, 'custom_fields'):
-            return fields
+        if self.context:
+            if not hasattr(self.Meta, 'methods') or not hasattr(self.Meta, 'custom_fields'):
+                return fields
 
-        if self.context['view'].action in self.Meta.methods:
-            fields = {field: fields[field] for field in self.Meta.custom_fields if field in fields}
-        
-        request = self.context.get('request')
-        self.user = request.user
+            if self.context['view'].action in self.Meta.methods:
+                fields = {field: fields[field] for field in self.Meta.custom_fields if field in fields}
+            
+            request = self.context.get('request')
+            self.user = request.user
 
         return fields
