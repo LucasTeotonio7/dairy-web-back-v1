@@ -1,5 +1,6 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -46,3 +47,15 @@ class UserView(viewsets.ModelViewSet):
         user.save()
 
         return Response({'status': 'senha atualizada com sucesso'}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='get-logged-user')
+    def get_logged_user(self, request):
+        user = self.request.user
+        if user:
+            user_serializer = self.serializer_class(user)
+            user_data = user_serializer.data
+            if user_data.get('image'):
+                user_data['image'] = request.build_absolute_uri(user.image.url)
+            return Response(user_data)
+
+        return Response(status=status.HTTP_404_NOT_FOUND)
