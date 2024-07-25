@@ -20,7 +20,7 @@ class User(TimestampedModel, AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = 'user'
-        ordering = ['username']
+        ordering = ['-is_active', '-last_login']
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
