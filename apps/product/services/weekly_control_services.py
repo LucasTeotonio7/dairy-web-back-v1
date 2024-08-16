@@ -12,7 +12,7 @@ def get_weekly_control_purchases_by_supplier(weekly_control: WeeklyControl, supp
     date_range = [start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1)]
 
     result = []
-    suppliers = Supplier.objects.all()
+    suppliers = Supplier.objects.all().order_by('name')
     if supplier_id:
         suppliers = suppliers.filter(id=supplier_id)
 
