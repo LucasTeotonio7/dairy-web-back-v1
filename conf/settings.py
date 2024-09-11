@@ -32,8 +32,13 @@ APP_ENV = config('APP_ENV')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('APP_DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    "*"
+]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",
+    "http://192.168.1.104:4200"
+]
 
 # Application definition
 
