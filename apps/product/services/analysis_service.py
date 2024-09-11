@@ -7,7 +7,7 @@ from apps.core.models import Supplier
 from apps.product.models import WeeklyControl, SupplierPayment
 
 
-def get_analysis():
+def get_analysis_big_numbers():
     amount_paid_weekly = SupplierPayment.objects.filter(
         created_at__gte=(timezone.now() - timedelta(days=7))
     ).annotate(
